@@ -1,5 +1,3 @@
-import { mongo } from "mongoose";
-
 const node_env = process.env.NODE_ENV
 
 if (node_env !== "production") {
