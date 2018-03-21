@@ -16,9 +16,9 @@ GET
 router.get("/", async (request, response) => {
 	const communities = await Community
 		.find({})
-		.populate("moderators", {_id: 1, username: 1})
-		.populate("members", {_id: 1, username: 1})
-		.populate("posts", {_id: 1, title: 1, type: 1})
+		.populate("moderators", { _id: 1, username: 1 })
+		.populate("members", { _id: 1, username: 1 })
+		.populate("posts", { _id: 1, title: 1, type: 1 })
 
 	response.json(communities.map(Community.format))
 })
