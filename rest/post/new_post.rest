@@ -5,7 +5,7 @@ Content-Type: application/json
 	"title": "Welcome to Cordial!",
 	"type": "text",
 	"body": "brigitte lindholmbrigitte lindholmbrigitte lindholmbrigitte lindholm",
-	"upvotes": 754,
-	"downvotes": 55,
-	"pinned": true
+	"pinned": true,
+	"user": "5ab2d9140c23202728948549",
+	"community": "5ab2d9260c2320272894854a"
 }

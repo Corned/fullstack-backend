@@ -29,6 +29,7 @@ app.use(middleware.tokenExtractor)
 
 // Controllers
 app.use("/api/post", require("./controllers/post"))
+app.use("/api/user", require("./controllers/user"))
 app.use("/api/community", require("./controllers/community"))
 
 server.listen(config.port, () => {

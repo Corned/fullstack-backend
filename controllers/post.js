@@ -48,26 +48,35 @@ router.get("/c/:community/controversial", async(request, response) => {
 
 router.post("/", async (request, response) => {
 	const body = request.body
-	if (body.type === undefined) {
-		response.status(400).json({ error: "Type missing" })
-	} else if (body.type !== "link" && body.type !== "text") {
-		response.status(400).json({ error: "Invalid body type" })
-	} else if (body.type === "link" && body.url === undefined) {
-		response.status(400).json({ error: "Link missing" })
-	} else if (body.type === "text" && body.body === undefined) {
-		response.status(400).json({ error: "Body missing" })
+	try {
+		if (body.type === undefined) {
+			return response.status(400).json({ error: "Type missing" })
+		} else if (body.type !== "link" && body.type !== "text") {
+			return response.status(400).json({ error: "Invalid body type" })
+		} else if (body.type === "link" && body.url === undefined) {
+			return response.status(400).json({ error: "Link missing" })
+		} else if (body.type === "text" && body.body === undefined) {
+			return response.status(400).json({ error: "Body missing" })
+		}
+
+		const post = new Post({
+			title: body.title,
+			date: new Date(),
+			type: body.type,
+			url: body.url,
+			body: body.body
+		})
+
+		const savedPost = await post.save()
+		response.status(201).json(savedPost)
+	} catch (exception) {
+		if (exception.name === "JsonWebTokenError") {
+			response.status(401).json({ error: exception.message })
+		} else {
+			console.log(exception)
+			response.status(500).json({ error: "Oops!" })
+		}
 	}
-
-	const post = new Post({
-		title: body.title,
-		date: new Date(),
-		type: body.type,
-		url: body.url,
-		body: body.body
-	})
-
-	const savedPost = await post.save()
-	response.status(201).json(savedPost)
 })
 
 router.delete("/:id", async (request, response) => {

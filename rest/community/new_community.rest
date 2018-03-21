@@ -1,0 +1,7 @@
+POST http://localhost:3003/api/community HTTP/1.1
+Content-Type: application/json
+
+{
+	"name": "Cordial-Meta",
+	"owner": "5ab2d9140c23202728948549"
+}
