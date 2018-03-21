@@ -12,7 +12,7 @@ async function establishDatabaseConnection() {
 	try {
 		mongoose.Promise = global.Promise
 		await mongoose.connect(config.mongoUri)
-		console.log("Connected to databse!")
+		console.log("Connected to database!")
 	} catch (error) {
 		console.log(error);
 	}
@@ -29,6 +29,7 @@ app.use(middleware.tokenExtractor)
 
 // Controllers
 app.use("/api/posts", require("./controllers/posts"))
+//app.use("/api/communities", require("./controllers/communities"))
 
 server.listen(config.port, () => {
 	establishDatabaseConnection()

@@ -54,6 +54,7 @@ router.post("/", async (request, response) => {
 
 	const post = new Post({
 		title: body.title,
+		date: new Date(),
 		type: body.type,
 		url: body.url,
 		body: body.body

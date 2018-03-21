@@ -2,7 +2,7 @@ POST http://localhost:3003/api/posts HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Title of the post",
+	"title": "Date test",
 	"type": "text",
-	"body": "Lorem ipsun and KFC, sitting in a tree"
+	"body": "brigitte lindholmbrigitte lindholmbrigitte lindholmbrigitte lindholm"
 }
