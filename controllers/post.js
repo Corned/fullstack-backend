@@ -49,7 +49,9 @@ router.get("/c/:community/controversial", async(request, response) => {
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
-		if (body.type === undefined) {
+		if (body.community === undefined) {
+			return response.status(400).json({ error: "Community missing" })
+		} if (body.type === undefined) {
 			return response.status(400).json({ error: "Type missing" })
 		} else if (body.type !== "link" && body.type !== "text") {
 			return response.status(400).json({ error: "Invalid body type" })
@@ -64,7 +66,8 @@ router.post("/", async (request, response) => {
 			date: new Date(),
 			type: body.type,
 			url: body.url,
-			body: body.body
+			body: body.body,
+			community: body.community
 		})
 
 		const savedPost = await post.save()
