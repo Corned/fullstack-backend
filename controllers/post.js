@@ -19,7 +19,7 @@ GET
 router.get("/", async (request, response) => {
 	const posts = await Post
 		.find({})
-		// .populate("user", {_id: 1, username: 1})
+		.populate("user", {_id: 1, username: 1})
 
 	response.json(posts.map(Post.format))
 })
