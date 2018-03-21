@@ -42,7 +42,25 @@ router.get("/:community/controversial", async(request, response) => {
 
 router.post("/", async (request, response) => {
 	const body = request.body
-	response.status(200).json({ "success": true })
+	if (body.type === undefined) {
+		response.status(400).json({ error: "Type missing" })
+	} else if (body.type !== "link" && body.type !== "text") {
+		response.status(400).json({ error: "Invalid body type" })
+	} else if (body.type === "link" && body.url === undefined) {
+		response.status(400).json({ error: "Link missing" })
+	} else if (body.type === "text" && body.body === undefined) {
+		response.status(400).json({ error: "Body missing" })
+	}
+
+	const post = new Post({
+		title: body.title,
+		type: body.type,
+		url: body.url,
+		body: body.body
+	})
+
+	const savedPost = await post.save()
+	response.status(201).json(savedPost)
 })
 
 router.delete("/:id", async (request, response) => {
