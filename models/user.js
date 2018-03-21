@@ -5,7 +5,12 @@ const userSchema = new mongoose.Schema({
 	passwordHash: String,
 	ownedCommunities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
 	communities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
-	posts: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ]
+	moderatorCommunities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
+	posts: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ],
+	upvoted: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ],
+	downvoted: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ],
+	saved: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ],
+	comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
 })
 
 userSchema.statics.format = user => {
@@ -13,8 +18,14 @@ userSchema.statics.format = user => {
 		id: user._id,
 		username: user.username,
 		passwordHash: user.passwordHash,
-		adult: user.adult,
-		posts: user.posts
+		ownedCommunities: user.ownedCommunities,
+		communities: user.communities,
+		moderatorCommunities: user.moderatorCommunities,
+		posts: user.posts,
+		upvoted: user.upvoted,
+		downvoted: user.downvoted,
+		saved: user.saved,
+		comments: user.comments,
 	}
 }
 

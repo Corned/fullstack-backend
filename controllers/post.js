@@ -6,11 +6,12 @@ const jwt = require("jsonwebtoken")
 
 /*
 
-	/api/posts/ <-- c/all
-	/api/posts/:community <-- hot
-	/api/posts/:community/new
-	/api/posts/:community/top
-	/api/posts/:community/controversial
+GET
+	/api/post/ <-- c/all
+	/api/post/:community <-- hot
+	/api/post/:community/new
+	/api/post/:community/top
+	/api/post/:community/controversial
 
 */
 
@@ -23,19 +24,24 @@ router.get("/", async (request, response) => {
 	response.json(posts.map(Post.format))
 })
 
-router.get("/:community/hot", async(request, response) => {
+// Specific post data
+router.get("/:id", async (request, response) => {
+
+})
+
+router.get("/c/:community/hot", async(request, response) => {
 	
 })
 
-router.get("/:community/new", async(request, response) => {
+router.get("/c/:community/new", async(request, response) => {
 	
 })
 
-router.get("/:community/top", async(request, response) => {
+router.get("/c/:community/top", async(request, response) => {
 	
 })
 
-router.get("/:community/controversial", async(request, response) => {
+router.get("/c/:community/controversial", async(request, response) => {
 	
 })
 

@@ -28,8 +28,8 @@ app.use(bodyParser.json())
 app.use(middleware.tokenExtractor)
 
 // Controllers
-app.use("/api/posts", require("./controllers/posts"))
-//app.use("/api/communities", require("./controllers/communities"))
+app.use("/api/post", require("./controllers/post"))
+app.use("/api/community", require("./controllers/community"))
 
 server.listen(config.port, () => {
 	establishDatabaseConnection()

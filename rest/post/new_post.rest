@@ -2,7 +2,7 @@ POST http://localhost:3003/api/posts HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Date test",
+	"title": "multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test multiline test ",
 	"type": "text",
 	"body": "brigitte lindholmbrigitte lindholmbrigitte lindholmbrigitte lindholm"
 }
