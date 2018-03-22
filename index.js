@@ -31,6 +31,7 @@ app.use(middleware.tokenExtractor)
 app.use("/api/post", require("./controllers/post"))
 app.use("/api/user", require("./controllers/user"))
 app.use("/api/community", require("./controllers/community"))
+app.use("/api/login", require("./controllers/login"))
 
 server.listen(config.port, () => {
 	establishDatabaseConnection()
