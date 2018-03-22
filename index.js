@@ -5,18 +5,9 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const morgan = require("morgan")
 
+const establishDatabaseConnection = require("./utils/establishDatabaseConnection")
 const config = require("./utils/configuration")
 const middleware = require("./utils/middleware")
-
-async function establishDatabaseConnection() {
-	try {
-		mongoose.Promise = global.Promise
-		await mongoose.connect(config.mongoUri)
-		console.log("Connected to database!")
-	} catch (error) {
-		console.log(error);
-	}
-}
 
 const app = express()
 const server = http.createServer(app)
@@ -34,7 +25,7 @@ app.use("/api/community", require("./controllers/community"))
 app.use("/api/login", require("./controllers/login"))
 
 server.listen(config.port, () => {
-	establishDatabaseConnection()
+	establishDatabaseConnection(config.mongoUri)
 	console.log(`Server running on port ${config.port}`)
 })
 

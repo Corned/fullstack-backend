@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
 	username: String,
+	isAdmin: Boolean,
 	passwordHash: String,
 	ownedCommunities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
 	communities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
@@ -17,6 +18,7 @@ userSchema.statics.format = user => {
 	return {
 		id: user._id,
 		username: user.username,
+		isAdmin: user.isAdmin,
 		passwordHash: user.passwordHash,
 		ownedCommunities: user.ownedCommunities,
 		communities: user.communities,
