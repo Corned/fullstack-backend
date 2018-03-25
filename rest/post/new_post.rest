@@ -2,9 +2,9 @@ POST http://localhost:3003/api/post HTTP/1.1
 Content-Type: application/json
 
 {
-	"title": "Technology Community",
+	"title": "Technology #2",
 	"type": "text",
-	"body": "brigitte lindholmbrigitte lindholmbrigitte lindholmbrigitte lindholm",
+	"body": "lorom lorom lorom lorom ",
 	"pinned": true,
 	"username": "Admin",
 	"communityName": "Technology"

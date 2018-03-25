@@ -31,15 +31,15 @@ router.get("/:id", async (request, response) => {
 })
 
 router.get("/c/:community", async(request, response) => {
-	const communityName = request.params.community
-	const community = await Community.findOne({ name: communityName })
+	const community = await Community.findOne({ name: request.params.community })
 	if (community === null) {
 		return response.status(400).json({ error: "Community missing or null" })
 	}
 
 	const posts = await Post
 		.find({ community: community._id })
-
+		.populate("user", { _id: 1, username: 1 })
+		.populate("community", { _id: 1, name: 1 })
 
 	response.status(200).json(posts)
 })
