@@ -18,6 +18,8 @@ router.get("/", async (request, response) => {
 		.find({})
 		.populate("moderators", { _id: 1, username: 1 })
 		.populate("members", { _id: 1, username: 1 })
+		.populate("owner", { _id: 1, username: 1 })
+		.populate("banned", { _id: 1, username: 1 })
 		.populate("posts", { _id: 1, title: 1, type: 1 })
 
 	response.json(communities.map(Community.format))
@@ -42,6 +44,7 @@ router.post("/", async (request, response) => {
 		})
 
 		const savedCommunity = await community.save()
+
 		response.status(201).json(savedCommunity)
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {
