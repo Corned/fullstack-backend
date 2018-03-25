@@ -1,5 +1,7 @@
 const router = require("express").Router()
 const Post = require("../models/post")
+const User = require("../models/user")
+const Community = require("../models/community")
 
 const jwt = require("jsonwebtoken")
 
@@ -50,9 +52,11 @@ router.get("/c/:community/controversial", async(request, response) => {
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
-		if (body.community === undefined) {
+		if (body.communityName === undefined ) {
 			return response.status(400).json({ error: "Community missing" })
-		} if (body.type === undefined) {
+		} else if (body.username === undefined) {
+			return response.status(400).json({ error: "User missing" })
+		} else if (body.type === undefined) {
 			return response.status(400).json({ error: "Type missing" })
 		} else if (body.type !== "link" && body.type !== "text") {
 			return response.status(400).json({ error: "Invalid body type" })
@@ -61,6 +65,21 @@ router.post("/", async (request, response) => {
 		} else if (body.type === "text" && body.body === undefined) {
 			return response.status(400).json({ error: "Body missing" })
 		}
+
+		// Get User from username
+		const user = await User.findOne({ username: body.username })
+		if (user === null) {
+			return response.status(400).json({ error: "User missing" })
+		} 
+		
+		// Get community from username
+		const community = await Community.findOne({ name: body.communityName })
+		if (community === null) {
+			return response.status(400).json({ error: "Community missing" })
+		}
+
+		body.user = user
+		body.community = community
 
 		const post = new Post({
 			title: body.title,

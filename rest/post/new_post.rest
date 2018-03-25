@@ -6,6 +6,6 @@ Content-Type: application/json
 	"type": "text",
 	"body": "brigitte lindholmbrigitte lindholmbrigitte lindholmbrigitte lindholm",
 	"pinned": true,
-	"user": "5ab2d9140c23202728948549",
-	"community": "5ab2d9260c2320272894854a"
+	"username": "Admin",
+	"communityName": "Cordial-Meta"
 }
