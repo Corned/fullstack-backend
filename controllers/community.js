@@ -32,7 +32,12 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "Name missing" })
 		} else if (body.owner === undefined) {
 			return response.status(400).json({ error: "Owner missing" })
-		}
+		}		
+		
+		const communities = await User.find({ name: body.name })
+		if (communities.length > 0) {
+			return response.status(400).json({ error: "Community name already taken" })
+		} 		
 
 		const community = new Community({
 			name: body.name,
