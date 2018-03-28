@@ -25,6 +25,7 @@ router.get("/:username", async (request, response) => {
 
 })
 
+// new user
 router.post("/", async (request, response) => {
 	const body = request.body
 

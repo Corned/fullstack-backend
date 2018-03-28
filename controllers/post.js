@@ -60,6 +60,15 @@ router.get("/c/:community/controversial", async(request, response) => {
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
+		const token = request.token
+		const decodedToken = jwt.verify(token, process.env.SECRET)
+
+		if (!token || !decodedToken.id) {
+			return response.status(401).json({ error: "Token missing or invalid" })
+		}
+
+		body.username = decodedToken.username
+
 		if (body.communityName === undefined ) {
 			return response.status(400).json({ error: "Community missing" })
 		} else if (body.username === undefined) {

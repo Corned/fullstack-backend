@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/post HTTP/1.1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWIyZDkxNDBjMjMyMDI3Mjg5NDg1NDkiLCJpYXQiOjE1MjIyMzkzNzN9.I8wZqKUCvYVQRXrztko90F_1gmQ4BE1sTgzqPQnIcrA
 
 {
 	"title": "Technology #2",
 	"type": "text",
 	"body": "lorom lorom lorom lorom ",
-	"pinned": true,
-	"username": "Admin",
-	"communityName": "Technology"
+	"pinned": false,
+	"communityName": "Cordial-Meta"
 }
