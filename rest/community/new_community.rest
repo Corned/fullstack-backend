@@ -1,7 +1,7 @@
 POST http://localhost:3003/api/community HTTP/1.1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWJiODhlYWZhYzRmZTJlYjE3ZGY4MmIiLCJpYXQiOjE1MjIyMzk3MzV9.Qnw7MDOrnuFQ5iWbZ16-MwphKln8XQgHKUEAK5R4WEU
 
 {
-	"name": "Movies",
-	"owner": "5ab2d9140c23202728948549"
+	"name": "Movies"
 }

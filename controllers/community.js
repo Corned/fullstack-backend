@@ -5,15 +5,6 @@ const User = require("../models/user")
 const jwt = require("jsonwebtoken")
 
 
-/*
-
-GET
-	/api/community/
-	/api/community/:name/:id
-
-*/
-
-
 router.get("/", async (request, response) => {
 	const communities = await Community
 		.find({})
@@ -29,11 +20,26 @@ router.get("/", async (request, response) => {
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
+		const token = request.token
+		const decodedToken = jwt.verify(token, process.env.SECRET)
+
+		if (!token || !decodedToken.id) {
+			return response.status(401).json({ error: "Token missing or invalid" })
+		}
+
+		body.owner = decodedToken.id
+
 		if (body.name === undefined) {
 			return response.status(400).json({ error: "Name missing" })
 		} else if (body.owner === undefined) {
 			return response.status(400).json({ error: "Owner missing" })
-		}		
+		}				
+		
+		// Get User from user id
+		const user = await User.findById(body.owner)
+		if (user === null) {
+			return response.status(400).json({ error: "User missing" })
+		} 
 		
 		const communities = await Community.find({ name: body.name })
 		if (communities.length > 0) {

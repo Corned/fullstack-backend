@@ -67,11 +67,11 @@ router.post("/", async (request, response) => {
 			return response.status(401).json({ error: "Token missing or invalid" })
 		}
 
-		body.username = decodedToken.username
+		body.user = decodedToken.id
 
 		if (body.communityName === undefined ) {
 			return response.status(400).json({ error: "Community missing" })
-		} else if (body.username === undefined) {
+		} else if (body.user === undefined) {
 			return response.status(400).json({ error: "User missing" })
 		} else if (body.type === undefined) {
 			return response.status(400).json({ error: "Type missing" })
@@ -83,8 +83,8 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "Body missing" })
 		}
 
-		// Get User from username
-		const user = await User.findOne({ username: body.username })
+		// Get User from user id
+		const user = await User.findById(body.user)
 		if (user === null) {
 			return response.status(400).json({ error: "User missing" })
 		} 
