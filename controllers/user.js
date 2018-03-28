@@ -13,16 +13,26 @@ GET
 
 
 router.get("/", async (request, response) => {
-	const Users = await User
+	const users = await User
 		.find({})
-		// .populate("user", {_id: 1, username: 1})
+		.populate("posts", { _id: 1, title: 1, type: 1 })
+		.populate("communities", { _id: 1, name: 1 })
+		.populate("ownedCommunities", { _id: 1, name: 1 })
+		.populate("moderatorCommunities", { _id: 1, name: 1 })
 
-	response.json(Users.map(User.format))
+	response.json(users.map(User.format))
 })
 
 // Specific User data
 router.get("/:username", async (request, response) => {
+	const user = await User
+		.findOne({ username: request.params.username })
+		.populate("posts", { _id: 1, title: 1, type: 1 })
+		.populate("communities", { _id: 1, name: 1 })
+		.populate("ownedCommunities", { _id: 1, name: 1 })
+		.populate("moderatorCommunities", { _id: 1, name: 1 })
 
+	response.json(User.format(user))
 })
 
 // new user

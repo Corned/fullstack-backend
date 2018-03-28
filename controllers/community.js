@@ -17,6 +17,18 @@ router.get("/", async (request, response) => {
 	response.json(communities.map(Community.format))
 })
 
+router.get("/:community", async (request, response) => {
+	const community = await Community
+		.findOne({ name: request.params.community })
+		.populate("moderators", { _id: 1, username: 1 })
+		.populate("members", { _id: 1, username: 1 })
+		.populate("owner", { _id: 1, username: 1 })
+		.populate("banned", { _id: 1, username: 1 })
+		.populate("posts", { _id: 1, title: 1, type: 1 })
+
+	response.json(Community.format(community))
+})
+
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
@@ -35,13 +47,13 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "Owner missing" })
 		}				
 		
-		// Get User from user id
 		const user = await User.findById(body.owner)
+		const communities = await Community.find({ name: body.name })
+
 		if (user === null) {
 			return response.status(400).json({ error: "User missing" })
 		} 
 		
-		const communities = await Community.find({ name: body.name })
 		if (communities.length > 0) {
 			return response.status(400).json({ error: "Community name already taken" })
 		} 		
@@ -55,6 +67,10 @@ router.post("/", async (request, response) => {
 			posts: []
 		})
 
+		user.communities = [ ...user.communities, community ]
+		user.ownedCommunities = [ ...user.ownedCommunities, community ]
+		user.moderatorCommunities = [ ...user.moderatorCommunities, community ]
+		await user.save()		
 		const savedCommunity = await community.save()
 
 		response.status(201).json(savedCommunity)

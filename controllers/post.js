@@ -27,7 +27,12 @@ router.get("/", async (request, response) => {
 
 // Specific post data
 router.get("/:id", async (request, response) => {
+	const post = await Post
+		.findById(request.params.id)
+		.populate("user", { _id: 1, username: 1 })
+		.populate("community", { _id: 1, name: 1 })
 
+	response.json(Post.format(post))
 })
 
 router.get("/c/:community", async(request, response) => {
@@ -67,13 +72,11 @@ router.post("/", async (request, response) => {
 			return response.status(401).json({ error: "Token missing or invalid" })
 		}
 
-		body.user = decodedToken.id
+		const userid = decodedToken.id
 
 		if (body.communityName === undefined ) {
 			return response.status(400).json({ error: "Community missing" })
-		} else if (body.user === undefined) {
-			return response.status(400).json({ error: "User missing" })
-		} else if (body.type === undefined) {
+		}  else if (body.type === undefined) {
 			return response.status(400).json({ error: "Type missing" })
 		} else if (body.type !== "link" && body.type !== "text") {
 			return response.status(400).json({ error: "Invalid body type" })
@@ -83,32 +86,33 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "Body missing" })
 		}
 
-		// Get User from user id
-		const user = await User.findById(body.user)
+
+		const user = await User.findById(userid)
+		const community = await Community.findOne({ name: body.communityName })
+
 		if (user === null) {
 			return response.status(400).json({ error: "User missing" })
-		} 
-		
-		// Get community from username
-		const community = await Community.findOne({ name: body.communityName })
-		if (community === null) {
+		} else if (community === null) {
 			return response.status(400).json({ error: "Community missing" })
 		}
 
-		body.user = user
-		body.community = community
-
 		const post = new Post({
 			title: body.title,
-			user: body.user,
+			user: userid,
+			community: community.id,
 			date: new Date(),
 			type: body.type,
 			url: body.url,
-			body: body.body,
-			community: body.community
+			body: body.body
 		})
 
+		user.posts = [ ...user.posts, post ]
+		community.posts = [ ...community.posts, post ]
+
+		await user.save()
+		await community.save()
 		const savedPost = await post.save()
+	
 		response.status(201).json(savedPost)
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {

@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/post HTTP/1.1
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWIyZDkxNDBjMjMyMDI3Mjg5NDg1NDkiLCJpYXQiOjE1MjIyMzkzNzN9.I8wZqKUCvYVQRXrztko90F_1gmQ4BE1sTgzqPQnIcrA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWJiYTRlMTg0ZmFjMThkZjQ4OWYzYmMiLCJpYXQiOjE1MjIyNDcwNDF9.VJ_5YcQ8TqM7-JG0U5FzkmfTgE678hU_trh7vaJtwCs
 
 {
-	"title": "Technology #2",
+	"title": "Test Post Please Ignore",
 	"type": "text",
 	"body": "lorom lorom lorom lorom ",
 	"pinned": false,
-	"communityName": "Cordial-Meta"
+	"communityName": "cordial"
 }

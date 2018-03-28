@@ -7,11 +7,7 @@ const postSchema = new mongoose.Schema({
 	date: Date,
 	type: String,
 	url: String,
-	body: String,
-	upvotes: [ Number ],
-	downvotes: [ Number ],
-	pinned: Boolean,
-	comments: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
+	body: String
 })
 
 postSchema.statics.format = (post) => {
@@ -23,11 +19,7 @@ postSchema.statics.format = (post) => {
 		date: new Date(post.date),
 		type: post.type,
 		url: post.url || undefined,
-		body: post.body || undefined,
-		upvotes: post.updates || [],
-		downvotes: post.downvotes || [],
-		pinned: post.pinned || false,
-		comments: post.comments || []
+		body: post.body || undefined
 	}
 }
 

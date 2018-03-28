@@ -1,7 +1,7 @@
 POST http://localhost:3003/api/community HTTP/1.1
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWJiODhlYWZhYzRmZTJlYjE3ZGY4MmIiLCJpYXQiOjE1MjIyMzk3MzV9.Qnw7MDOrnuFQ5iWbZ16-MwphKln8XQgHKUEAK5R4WEU
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWJiYTRlMTg0ZmFjMThkZjQ4OWYzYmMiLCJpYXQiOjE1MjIyNDY4ODl9.qj8Hh58M5P526xAP5UTNToUAJqjJAhrSSoy1a6n0-i8
 
 {
-	"name": "Movies"
+	"name": "cordial"
 }
