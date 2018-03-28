@@ -40,10 +40,13 @@ router.post("/", async (request, response) => {
 	const body = request.body
 
 	try {
-		if (body.password === undefined) {
+		
+		if (body.username === undefined) {
+			return response.status(400).json({ error: "Username missing" })
+		} if (body.password === undefined) {
 			return response.status(400).json({ error: "Password missing" })
 		} else if (body.password.length < 6) {
-			return response.status(400).json({ error: "Password too short ( <6 ) "})
+			return response.status(400).json({ error: "Password too short ( < 6 )"})
 		}
 
 		const users = await User.find({ username: body.username })
