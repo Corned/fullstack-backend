@@ -78,6 +78,7 @@ router.post("/", async (request, response) => {
 		if (exception.name === "JsonWebTokenError") {
 			response.status(401).json({ error: exception.message })
 		} else {
+			console.log(body)
 			console.log(exception)
 			response.status(500).json({ error: "Oops!" })
 		}

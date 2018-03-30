@@ -74,7 +74,7 @@ router.post("/", async (request, response) => {
 
 		const userid = decodedToken.id
 
-		if (body.communityName === undefined ) {
+		if (body.community === undefined ) {
 			return response.status(400).json({ error: "Community missing" })
 		}  else if (body.type === undefined) {
 			return response.status(400).json({ error: "Type missing" })
@@ -86,9 +86,8 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "Body missing" })
 		}
 
-
 		const user = await User.findById(userid)
-		const community = await Community.findOne({ name: body.communityName })
+		const community = await Community.findOne({ name: body.community })
 
 		if (user === null) {
 			return response.status(400).json({ error: "User missing" })

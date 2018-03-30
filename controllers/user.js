@@ -51,7 +51,7 @@ router.post("/", async (request, response) => {
 
 		const users = await User.find({ username: body.username })
 		if (users.length > 0) {
-			return response.status(400).json({ error: "Username already in use" })
+			return response.status(400).json({ error: "Username already taken" })
 		} 		
 
 		const saltRounds = 11

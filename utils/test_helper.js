@@ -1,23 +1,27 @@
+const User = require("../models/user")
+const Community = require("../models/community")
 const Post = require("../models/post")
 
-const initialPosts = [
+const initialUsers = [
 	{
-		id: "1",
-		title: "1 Hello World!",
-		date: new Date(),
-		type: "text",
-		url: undefined,
-		body: "This is a textpost!"
-	}, 
+		username: "LoggingTest",
+		password: "123456"
+	},
 	{
-		id: "2",
-		title: "2 Goodbye World!",
-		date: new Date(),
-		type: "link",
-		url: "https://google.com/",
-		body: undefined
-	}, 
+		username: "TestUser",
+		password: "123456"
+	}
 ]
+
+const usersInDb = async () => {
+	const users = await User.find({})
+	return users
+}
+
+const communitiesInDb = async () => {
+	const communities = await Community.find({})
+	return communities
+}
 
 const postsInDb = async () => {
 	const posts = await Post.find({})
@@ -25,6 +29,8 @@ const postsInDb = async () => {
 }
 
 module.exports = {
-	initialPosts,
+	initialUsers,
+	usersInDb,
+	communitiesInDb,
 	postsInDb
 }
