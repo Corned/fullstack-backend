@@ -10,6 +10,10 @@ const initialUsers = [
 	{
 		username: "TestUser",
 		password: "123456"
+	},
+	{
+		username: "Taken",
+		password: "123456"
 	}
 ]
 
@@ -28,9 +32,35 @@ const postsInDb = async () => {
 	return posts.map(Post.format)
 }
 
+const createUsers = async (api) => {
+	await Promise.all(
+		initialUsers.map(userdata => 
+			api
+				.post("/api/user")
+				.send(userdata)
+				.expect(201)
+				.expect("Content-Type", /application\/json/)
+		)
+	)
+}
+
+const login = async (api, credentials) => {
+	const response = await api
+		.post("/api/login")
+		.send(credentials)
+		.expect(200)
+		.expect("Content-Type", /application\/json/)
+
+	return response.body
+}
+
 module.exports = {
 	initialUsers,
+
 	usersInDb,
 	communitiesInDb,
-	postsInDb
+	postsInDb,
+
+	login,
+	createUsers
 }

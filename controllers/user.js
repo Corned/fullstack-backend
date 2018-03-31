@@ -58,7 +58,7 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "username already taken" })
 		} 		
 
-		const saltRounds = 11
+		const saltRounds = 10
 		const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
 		const user = new User({

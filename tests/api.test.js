@@ -2,7 +2,16 @@ const supertest = require("supertest")
 const { app, server } = require("../index")
 const api = supertest(app)
 
-const { initialUsers, usersInDb, initialCommunities, communitiesInDb, initialPosts, postsInDb, } = require("../utils/test_helper")
+const {
+	initialUsers,
+
+	usersInDb,
+	communitiesInDb,
+	postsInDb,
+
+	login,
+	createUsers
+} = require("../utils/test_helper")
 
 const Post = require("../models/post")
 const User = require("../models/user")
@@ -49,11 +58,7 @@ describe("account creation", () => {
 	beforeAll(async () => {
 		await User.remove({})
 		
-		await api
-			.post("/api/user")
-			.send({ "username": "Taken", "password": "123456" })
-			.expect(201)
-			.expect("Content-Type", /application\/json/)
+		await createUsers(api)
 	})
 
 	describe("fails when", () => {
@@ -141,15 +146,7 @@ describe("when there are users in database", () => {
 		await Community.remove({})
 		await Post.remove({})
 
-		await Promise.all(
-			initialUsers.map(userdata => 
-				api
-					.post("/api/user")
-					.send(userdata)
-					.expect(201)
-					.expect("Content-Type", /application\/json/)
-			)
-		)
+		await createUsers(api)
 	})
 
 	test("GET /api/user/:id returns information about user", async () => {
@@ -303,49 +300,3 @@ describe("when there are users in database", () => {
 		})
 	})
 })
-
-
-/* 
-describe("when there are posts, users and communities in database", () => {
-	beforeAll(async () => {
-		await User.remove({})
-		await Community.remove({})
-		await Post.remove({})
-
-		await Promise.all(
-			initialPosts.map(post => new Post(post)).map(post => 
-					post.save()
-				)
-			)
-		
-	})
-
-	test("GET /api/post returns all posts", async () => {
-		const postsInDatabase = await postsInDb()
-
-		const response = await api
-			.get("/api/post")
-			.expect(200)
-			.expect("Content-Type", /application\/json/)
-
-		expect(response.body.length).toBe(postsInDatabase.length)
-
-		const returnedTitles = response.body.map(post => post.title)
-		postsInDatabase.forEach(post => {
-			expect(returnedTitles).toContain(post.title)
-		})
-	})
-
-	test("GET /api/post/:id returns the correct post", async () => {
-		const postsInDatabase = await postsInDb()
-		const postWithId = postsInDatabase[0]
-		const postId = postWithId.id
-
-		const response = await api
-			.get(`/api/post/${postId}`)
-			.expect(200)
-			.expect("Content-Type", /application\/json/)
-
-		expect(response.body.id).toBe(postId)
-	})
-})*/
