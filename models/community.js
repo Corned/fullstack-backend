@@ -11,7 +11,7 @@ const communitySchema = new mongoose.Schema({
 
 communitySchema.statics.format = (community) => {
 	return {
-		id: community._id,
+		id: community.id,
 		name: community.name,
 		owner: community.owner,
 		moderators: community.moderators,

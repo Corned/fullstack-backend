@@ -161,8 +161,8 @@ describe("when there are users in database", () => {
 			.expect(200)
 			.expect("Content-Type", /application\/json/)
 
-		expect(response.body).toContain(user.id)
-		expect(response.body).toContain(user.username)
+		expect(response.body.id).toBe(user.id)
+		expect(response.body.username).toBe(user.username)
 	})
 
 	describe("logging in", () => {

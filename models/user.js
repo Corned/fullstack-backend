@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.format = user => {
 	return {
-		id: user._id,
+		id: user.id,
 		username: user.username,
 		isAdmin: user.isAdmin,
 		passwordHash: user.passwordHash,
