@@ -34,7 +34,7 @@ router.post("/", async (request, response) => {
 	try {
 		const token = request.token
 		const decodedToken = jwt.verify(token, process.env.SECRET)
-
+		
 		if (!token || !decodedToken.id) {
 			return response.status(401).json({ error: "token missing or invalid" })
 		}
@@ -44,10 +44,10 @@ router.post("/", async (request, response) => {
 		if (body.name === undefined) {
 			return response.status(400).json({ error: "name is missing" })
 		}			
-		
+				
 		const user = await User.findById(body.owner)
 		const communities = await Community.find({ name: body.name })
-
+		
 		if (user === null) {
 			// Should never happen
 			return response.status(400).json({ error: "this should never happen (user is missing but authentication worked)" })
@@ -65,13 +65,13 @@ router.post("/", async (request, response) => {
 			banned: [],
 			posts: []
 		})
-
+		
 		user.communities = [ ...user.communities, community ]
 		user.ownedCommunities = [ ...user.ownedCommunities, community ]
 		user.moderatorCommunities = [ ...user.moderatorCommunities, community ]
 		await user.save()		
 		const savedCommunity = await community.save()
-
+		
 		response.status(201).json(savedCommunity)
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {

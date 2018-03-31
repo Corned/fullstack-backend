@@ -76,8 +76,10 @@ router.post("/", async (request, response) => {
 
 		if (body.community === undefined ) {
 			return response.status(400).json({ error: "community missing" })
-		}  else if (body.type === undefined) {
-			return response.status(400).json({ error: "tType missing" })
+		} else if (body.title === undefined) {
+			return response.status(400).json({ error: "title missing" })
+		} else if (body.type === undefined) {
+			return response.status(400).json({ error: "type missing" })
 		} else if (body.type !== "link" && body.type !== "text") {
 			return response.status(400).json({ error: "invalid body type" })
 		} else if (body.type === "link" && body.url === undefined) {

@@ -10,12 +10,15 @@ const {
 	postsInDb,
 
 	login,
-	createUsers
+	createUsers,
+	createCommunities,
+	createPosts
 } = require("../utils/test_helper")
 
 const Post = require("../models/post")
 const User = require("../models/user")
 const Community = require("../models/community")
+
 
 describe("when there are no data in database", () => {
 	beforeAll(async () => {
@@ -51,6 +54,48 @@ describe("when there are no data in database", () => {
 	
 			expect(response.body.length).toBe(0)
 		})
+	})
+})
+
+
+describe("when there are data in database", () => {
+	beforeAll(async () => {
+		await User.remove({})
+		await Community.remove({})
+		await Post.remove({})
+
+		await createUsers(api)
+		await createCommunities(api)
+		await createPosts(api) 
+	}, 20000)
+
+	describe("all data is returned by", () => {
+		test("GET /api/user", async () => {
+			const response = await api
+				.get("/api/user")
+				.expect(200)
+				.expect("Content-Type", /application\/json/)
+	
+			expect(response.body.length).toBe(3)
+		})
+		
+		test("GET /api/community", async () => {
+			const response = await api
+				.get("/api/community")
+				.expect(200)
+				.expect("Content-Type", /application\/json/)
+	
+			expect(response.body.length).toBe(3)
+		})
+	
+		test("GET /api/post", async () => {
+			const response = await api
+				.get("/api/post")
+				.expect(200)
+				.expect("Content-Type", /application\/json/)
+	
+			expect(response.body.length).toBe(3)
+		}) 
 	})
 })
 
