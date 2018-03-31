@@ -36,26 +36,25 @@ router.post("/", async (request, response) => {
 		const decodedToken = jwt.verify(token, process.env.SECRET)
 
 		if (!token || !decodedToken.id) {
-			return response.status(401).json({ error: "Token missing or invalid" })
+			return response.status(401).json({ error: "token missing or invalid" })
 		}
 
 		body.owner = decodedToken.id
 
 		if (body.name === undefined) {
-			return response.status(400).json({ error: "Name missing" })
-		} else if (body.owner === undefined) {
-			return response.status(400).json({ error: "Owner missing" })
-		}				
+			return response.status(400).json({ error: "name is missing" })
+		}			
 		
 		const user = await User.findById(body.owner)
 		const communities = await Community.find({ name: body.name })
 
 		if (user === null) {
-			return response.status(400).json({ error: "User missing" })
+			// Should never happen
+			return response.status(400).json({ error: "this should never happen (user is missing but authentication worked)" })
 		} 
 		
 		if (communities.length > 0) {
-			return response.status(400).json({ error: "Community name already taken" })
+			return response.status(400).json({ error: "name already taken" })
 		} 		
 
 		const community = new Community({

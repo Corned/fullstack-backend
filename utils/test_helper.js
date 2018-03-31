@@ -15,17 +15,17 @@ const initialUsers = [
 
 const usersInDb = async () => {
 	const users = await User.find({})
-	return users
+	return users.map(User.format)
 }
 
 const communitiesInDb = async () => {
 	const communities = await Community.find({})
-	return communities
+	return communities.map(Community.format)
 }
 
 const postsInDb = async () => {
 	const posts = await Post.find({})
-	return posts
+	return posts.map(Post.format)
 }
 
 module.exports = {

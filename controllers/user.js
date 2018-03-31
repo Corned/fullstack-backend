@@ -25,14 +25,18 @@ router.get("/", async (request, response) => {
 
 // Specific User data
 router.get("/:username", async (request, response) => {
-	const user = await User
-		.findOne({ username: request.params.username })
-		.populate("posts", { _id: 1, title: 1, type: 1 })
-		.populate("communities", { _id: 1, name: 1 })
-		.populate("ownedCommunities", { _id: 1, name: 1 })
-		.populate("moderatorCommunities", { _id: 1, name: 1 })
-
-	response.json(User.format(user))
+	try {
+		const user = await User
+			.findOne({ username: request.params.username })
+			.populate("posts", { _id: 1, title: 1, type: 1 })
+			.populate("communities", { _id: 1, name: 1 })
+			.populate("ownedCommunities", { _id: 1, name: 1 })
+			.populate("moderatorCommunities", { _id: 1, name: 1 })
+	
+		response.json(User.format(user))
+	} catch (exception) {
+		response.status(400).json({ error: "user not found" })
+	}
 })
 
 // new user
@@ -42,16 +46,16 @@ router.post("/", async (request, response) => {
 	try {
 		
 		if (body.username === undefined) {
-			return response.status(400).json({ error: "Username missing" })
+			return response.status(400).json({ error: "username missing" })
 		} if (body.password === undefined) {
-			return response.status(400).json({ error: "Password missing" })
+			return response.status(400).json({ error: "password missing" })
 		} else if (body.password.length < 6) {
-			return response.status(400).json({ error: "Password too short ( < 6 )"})
+			return response.status(400).json({ error: "password too short ( < 6 )"})
 		}
 
 		const users = await User.find({ username: body.username })
 		if (users.length > 0) {
-			return response.status(400).json({ error: "Username already taken" })
+			return response.status(400).json({ error: "username already taken" })
 		} 		
 
 		const saltRounds = 11
@@ -60,6 +64,7 @@ router.post("/", async (request, response) => {
 		const user = new User({
 			username: body.username,
 			passwordHash,
+			isAdmin: false,
 			ownedCommunities: [],
 			posts: [],
 			upvoted: [],

@@ -68,7 +68,7 @@ describe("account creation", () => {
 				.expect(400)
 				.expect("Content-Type", /application\/json/)
 	
-			expect(response.body.error).toBe("Username missing")
+			expect(response.body.error).toBe("username missing")
 		})
 	
 		test("password is undefined", async () => {
@@ -82,7 +82,7 @@ describe("account creation", () => {
 				.expect(400)
 				.expect("Content-Type", /application\/json/)
 	
-			expect(response.body.error).toBe("Password missing")
+			expect(response.body.error).toBe("password missing")
 		})
 	
 		test("password is too short ( <6 )", async () => {
@@ -97,7 +97,7 @@ describe("account creation", () => {
 				.expect(400)
 				.expect("Content-Type", /application\/json/)
 	
-			expect(response.body.error).toBe("Password too short ( < 6 )")
+			expect(response.body.error).toBe("password too short ( < 6 )")
 		})
 	
 		test("username is already taken", async () => {
@@ -112,7 +112,7 @@ describe("account creation", () => {
 				.expect(400)
 				.expect("Content-Type", /application\/json/)
 	
-			expect(response.body.error).toBe("Username already taken")
+			expect(response.body.error).toBe("username already taken")
 		})
 	})
 
@@ -152,6 +152,19 @@ describe("when there are users in database", () => {
 		)
 	})
 
+	test("GET /api/user/:id returns information about user", async () => {
+		const usersInDatabase = await usersInDb()
+		const user = usersInDatabase[0]
+
+		const response = await api
+			.get(`/api/user/${user.username}`)
+			.expect(200)
+			.expect("Content-Type", /application\/json/)
+
+		expect(response.body).toContain(user.id)
+		expect(response.body).toContain(user.username)
+	})
+
 	describe("logging in", () => {
 		test("is possible with valid credentials", async () => {
 			const credentials = {
@@ -184,7 +197,7 @@ describe("when there are users in database", () => {
 				.expect(401)
 				.expect("Content-Type", /application\/json/)
 
-			expect(response.body.error).toBe("Invalid username or password")
+			expect(response.body.error).toBe("invalid username or password")
 		})
 	})
 
@@ -192,8 +205,7 @@ describe("when there are users in database", () => {
 		describe("when not logged in", () => {
 			test("unable to create a community", async () => {
 				const data = {
-					"name": "TestCommunity",
-					"owner": "TestUser"
+					"name": "TestCommunity"
 				}
 
 				const response = await api
@@ -207,8 +219,7 @@ describe("when there are users in database", () => {
 
 			test("unable to create a community with malformed token", async () => {
 				const data = {
-					"name": "TestCommunity",
-					"owner": "TestUser"
+					"name": "TestCommunity"
 				}
 
 				const response = await api
@@ -220,9 +231,76 @@ describe("when there are users in database", () => {
 
 				expect(response.body.error).toBe("jwt malformed")
 			})
-
 		})
 
+		describe("when logged in", () => {
+			let loggedInUserData
+
+			beforeAll(async () => {
+				const credentials = {
+					"username": "TestUser",
+					"password": "123456"
+				}
+		
+				const response = await api
+					.post("/api/login")
+					.send(credentials)
+					.expect(200)
+					.expect("Content-Type", /application\/json/)
+
+				loggedInUserData = response.body
+			})
+
+			test("able to create a community when name is not taken", async () => {
+				const communityData = {
+					"name": "TestCommunity"
+				}
+
+				const response = await api
+					.post("/api/community")
+					.set("Authorization", `bearer ${loggedInUserData.token}`)
+					.send(communityData)
+					.expect(201)
+					.expect("Content-Type", /application\/json/)
+					
+				expect(response.body.name).toBe(communityData.name)
+				expect(response.body.owner).toBe(loggedInUserData.user._id)
+				expect(response.body.moderators[0]).toBe(loggedInUserData.user._id)
+				expect(response.body.members[0]).toBe(loggedInUserData.user._id)
+				expect(response.body.posts.length).toBe(0)
+				expect(response.body.banned.length).toBe(0)
+			})
+
+			test("unable to create a community when name is taken", async () => {
+				const communityData = {
+					"name": "TestCommunity"
+				}
+
+				const response = await api
+					.post("/api/community")
+					.set("Authorization", `bearer ${loggedInUserData.token}`)
+					.send(communityData)
+					.expect(400)
+					.expect("Content-Type", /application\/json/)
+					
+				expect(response.body.error).toBe("name already taken")
+			})
+
+			test("unable to create a community when name is undefined", async () => {
+				const communityData = {
+					"name": undefined
+				}
+
+				const response = await api
+					.post("/api/community")
+					.set("Authorization", `bearer ${loggedInUserData.token}`)
+					.send(communityData)
+					.expect(400)
+					.expect("Content-Type", /application\/json/)
+					
+				expect(response.body.error).toBe("name is missing")
+			})
+		})
 	})
 })
 
