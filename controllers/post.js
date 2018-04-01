@@ -35,22 +35,6 @@ router.get("/:id", async (request, response) => {
 	response.json(Post.format(post))
 })
 
-/*
-router.get("/c/:community", async(request, response) => {
-	const community = await Community.findOne({ name: request.params.community })
-	if (community === null) {
-		return response.status(400).json({ error: "community missing" })
-	}
-
-	const posts = await Post
-		.find({ community: community._id })
-		.populate("user", { _id: 1, username: 1 })
-		.populate("community", { _id: 1, name: 1 })
-
-	response.status(200).json(posts)
-})
-*/
-
 router.post("/", async (request, response) => {
 	const body = request.body
 	try {
