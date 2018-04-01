@@ -35,6 +35,7 @@ router.get("/:id", async (request, response) => {
 	response.json(Post.format(post))
 })
 
+/*
 router.get("/c/:community", async(request, response) => {
 	const community = await Community.findOne({ name: request.params.community })
 	if (community === null) {
@@ -48,19 +49,7 @@ router.get("/c/:community", async(request, response) => {
 
 	response.status(200).json(posts)
 })
-
-router.get("/c/:community/new", async(request, response) => {
-	
-})
-
-router.get("/c/:community/top", async(request, response) => {
-	
-})
-
-router.get("/c/:community/controversial", async(request, response) => {
-	
-})
-
+*/
 
 router.post("/", async (request, response) => {
 	const body = request.body
@@ -83,7 +72,7 @@ router.post("/", async (request, response) => {
 		} else if (body.type !== "link" && body.type !== "text") {
 			return response.status(400).json({ error: "invalid body type" })
 		} else if (body.type === "link" && body.url === undefined) {
-			return response.status(400).json({ error: "link missing" })
+			return response.status(400).json({ error: "url missing" })
 		} else if (body.type === "text" && body.body === undefined) {
 			return response.status(400).json({ error: "body missing" })
 		}
@@ -113,7 +102,7 @@ router.post("/", async (request, response) => {
 		await user.save()
 		await community.save()
 		const savedPost = await post.save()
-	
+		
 		response.status(201).json(savedPost)
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {
