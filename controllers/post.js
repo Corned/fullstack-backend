@@ -5,17 +5,6 @@ const Community = require("../models/community")
 
 const jwt = require("jsonwebtoken")
 
-
-/*
-
-GET
-	/api/post/ <-- c/all
-	/api/post/:community <-- hot
-	/api/post/:community/new
-	/api/post/:community/top
-	/api/post/:community/controversial
-*/
-
 router.get("/", async (request, response) => {
 	const posts = await Post
 		.find({})
@@ -33,6 +22,28 @@ router.get("/:id", async (request, response) => {
 		.populate("community", { _id: 1, name: 1 })
 
 	response.json(Post.format(post))
+})
+
+router.get("/c/:community", async (request, response) => {
+	try {
+		console.log(request.params.community)
+		const community = await Community
+			.findOne({ name: request.params.community })
+
+		if (community === undefined) {
+			return response.json(400).json({ error: "community not found" })
+		}
+
+		console.log(community)
+
+		const posts = await Post
+			.find({ community: community._id })
+
+		response.json(posts.map(Post.format))
+	} catch (exception) {
+		response.status(500).json({ error: "oops" })
+	}
+
 })
 
 router.post("/", async (request, response) => {
