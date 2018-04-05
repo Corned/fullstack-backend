@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/community HTTP/1.1
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWJiYTRlMTg0ZmFjMThkZjQ4OWYzYmMiLCJpYXQiOjE1MjIyNDY4ODl9.qj8Hh58M5P526xAP5UTNToUAJqjJAhrSSoy1a6n0-i8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI1YWM2NzRjZjU2MDI4ZjhkOGNiNGVhNjUiLCJpYXQiOjE1MjI5NTU0ODd9.7tFXz5WxhiOei4u_EeV-WXUDwlRaO1LIIuKdwxfqCLE
 
 {
 	"name": "cordial"

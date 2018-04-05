@@ -50,20 +50,24 @@ router.get("/c/:community", async (request, response) => {
 
 router.post("/", async (request, response) => {
 	const body = request.body
+	
 	try {
 		const token = request.token
 		const decodedToken = jwt.verify(token, process.env.SECRET)
 
 		if (!token || !decodedToken.id) {
+			console.log("WTFFFFFFFFFFFFF")
 			return response.status(401).json({ error: "token missing or invalid" })
 		}
 
 		const userid = decodedToken.id
 
-		if (body.community === undefined ) {
+		if (body.community === undefined) {
 			return response.status(400).json({ error: "community missing" })
 		} else if (body.title === undefined) {
 			return response.status(400).json({ error: "title missing" })
+		} else if (body.title.length < 3) {
+			return response.status(400).json({ error: "title's length must be greater than 3"})
 		} else if (body.type === undefined) {
 			return response.status(400).json({ error: "type missing" })
 		} else if (body.type !== "link" && body.type !== "text") {
@@ -72,6 +76,8 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "url missing" })
 		} else if (body.type === "text" && body.body === undefined) {
 			return response.status(400).json({ error: "body missing" })
+		} else if (body.type === "text" && body.body.length < 3) {
+			return response.status(400).json({ error: "body's length must be greater than 3" })
 		}
 
 		const user = await User.findById(userid)

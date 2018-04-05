@@ -439,7 +439,7 @@ describe("content creation", () => {
 				expect(response.body.body).toBe(postData.body)
 			})
 
-			test("400 Unable to create a post when title is undefined", async () => {
+			test("400 Unable to create a post when community is undefined", async () => {
 				const postData = {
 					community: undefined,
 					title: "Title of the Ancients",
@@ -545,6 +545,42 @@ describe("content creation", () => {
 					.expect("Content-Type", /application\/json/)
 				
 				expect(response.body.error).toBe("body missing")
+			})
+
+			test("400 Unable to create a post with a type of \"text\" when body is too short", async () => {
+				const postData = {
+					community: "TestCommunity",
+					title: "hello world",
+					type: "text",
+					body: "12"
+				}
+	
+				const response = await api
+					.post("/api/post")
+					.set("Authorization", `bearer ${loggedInUserData.token}`)
+					.send(postData)
+					.expect(400)
+					.expect("Content-Type", /application\/json/)
+				
+				expect(response.body.error).toBe("body's length must be greater than 3")
+			})
+
+			test("400 Unable to create a post with a type of \"text\" when title is too short", async () => {
+				const postData = {
+					community: "TestCommunity",
+					title: "12",
+					type: "text",
+					body: "123456"
+				}
+	
+				const response = await api
+					.post("/api/post")
+					.set("Authorization", `bearer ${loggedInUserData.token}`)
+					.send(postData)
+					.expect(400)
+					.expect("Content-Type", /application\/json/)
+				
+				expect(response.body.error).toBe("title's length must be greater than 3")
 			})
 		})
 	})
