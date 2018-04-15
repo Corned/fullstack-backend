@@ -44,10 +44,17 @@ router.post("/", async (request, response) => {
 	const body = request.body
 
 	try {
-		
 		if (body.username === undefined) {
 			return response.status(400).json({ error: "username missing" })
-		} if (body.password === undefined) {
+		}
+		
+		body.username.trim()
+
+		if (body.username.match(/(\s|\W)/g)) {
+			return response.status(400).json({ error: "username cannot contain any special characters" })
+		} else if (body.username.length < 3) {
+			return response.status(400).json({ error: "username too short ( < 3 )" })
+		} else if (body.password === undefined) {
 			return response.status(400).json({ error: "password missing" })
 		} else if (body.password.length < 6) {
 			return response.status(400).json({ error: "password too short ( < 6 )"})
@@ -56,7 +63,7 @@ router.post("/", async (request, response) => {
 		const users = await User.find({ username: body.username })
 		if (users.length > 0) {
 			return response.status(400).json({ error: "username already taken" })
-		} 		
+		}
 
 		const saltRounds = 10
 		const passwordHash = await bcrypt.hash(body.password, saltRounds)

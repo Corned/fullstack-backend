@@ -26,15 +26,12 @@ router.get("/:id", async (request, response) => {
 
 router.get("/c/:community", async (request, response) => {
 	try {
-		console.log(request.params.community)
 		const community = await Community
 			.findOne({ name: request.params.community })
 
 		if (community === undefined) {
 			return response.json(400).json({ error: "community not found" })
 		}
-
-		console.log(community)
 
 		const posts = await Post
 			.find({ community: community._id })
@@ -56,7 +53,6 @@ router.post("/", async (request, response) => {
 		const decodedToken = jwt.verify(token, process.env.SECRET)
 
 		if (!token || !decodedToken.id) {
-			console.log("WTFFFFFFFFFFFFF")
 			return response.status(401).json({ error: "token missing or invalid" })
 		}
 
