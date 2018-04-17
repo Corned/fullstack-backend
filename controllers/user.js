@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs")
 router.get("/", async (request, response) => {
 	const users = await User
 		.find({})
-		.populate("posts", { title: 1, type: 1 })
+		.populate("posts", { title: 1, user: 1, community: 1 })
 		.populate("communities", { name: 1 })
 		.populate("ownedCommunities", { name: 1 })
 		.populate("moderatorCommunities", { name: 1 })
@@ -27,8 +27,8 @@ router.get("/:username", async (request, response) => {
 			.populate("ownedCommunities", { name: 1 })
 			.populate("moderatorCommunities", { name: 1 })
 
+
 		await User.deepPopulate(user, "posts.community posts.user")
-		user.posts = Post.format(user.posts)
 
 		response.json(User.format(user))
 	} catch (exception) {
