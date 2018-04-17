@@ -1,24 +1,18 @@
 const router = require("express").Router()
 const User = require("../models/user")
+const Post = require("../models/post")
+const Community = require("../models/community")
 
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 
-/*
-
-GET
-	/api/user
-	/api/user/:id
-*/
-
-
 router.get("/", async (request, response) => {
 	const users = await User
 		.find({})
-		.populate("posts", { _id: 1, title: 1, type: 1 })
-		.populate("communities", { _id: 1, name: 1 })
-		.populate("ownedCommunities", { _id: 1, name: 1 })
-		.populate("moderatorCommunities", { _id: 1, name: 1 })
+		.populate("posts", { title: 1, type: 1 })
+		.populate("communities", { name: 1 })
+		.populate("ownedCommunities", { name: 1 })
+		.populate("moderatorCommunities", { name: 1 })
 
 	response.json(users.map(User.format))
 })
@@ -28,11 +22,13 @@ router.get("/:username", async (request, response) => {
 	try {
 		const user = await User
 			.findOne({ username: request.params.username })
-			.populate("posts", { _id: 1, title: 1, type: 1 })
-			.populate("communities", { _id: 1, name: 1 })
-			.populate("ownedCommunities", { _id: 1, name: 1 })
-			.populate("moderatorCommunities", { _id: 1, name: 1 })
-	
+			.populate("posts", { title: 1, type: 1, date: 1, body: 1, url: 1, user: 1, community: 1 })
+			.populate("communities", { name: 1 })
+			.populate("ownedCommunities", { name: 1 })
+			.populate("moderatorCommunities", { name: 1 })
+
+		await User.deepPopulate(user, "posts.community")
+
 		response.json(User.format(user))
 	} catch (exception) {
 		response.status(400).json({ error: "user not found" })
