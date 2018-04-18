@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const postSchema = new mongoose.Schema({
 	user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	community: { type: mongoose.Schema.Types.ObjectId, ref: "Community" },
-	comments: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
+	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 	title: String,
 	date: Date,
 	type: String,
