@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const deepPopulate = require('mongoose-deep-populate')(mongoose);
+const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const userSchema = new mongoose.Schema({
 	username: String,

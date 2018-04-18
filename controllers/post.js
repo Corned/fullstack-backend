@@ -42,7 +42,24 @@ router.get("/c/:community", async (request, response) => {
 	} catch (exception) {
 		response.status(500).json({ error: "oops" })
 	}
+})
 
+router.get("/u/:username", async (request, response) => {
+	try {
+		const user = await User
+			.findOne({ username: request.params.username })
+
+		if (user === undefined) {
+			return response.json(400).json({ error: "user not found" })
+		}
+
+		const posts = await Post
+			.find({ user: user._id })
+
+		response.json(posts.map(Post.format))
+	} catch (exception) {
+		response.status(500).json({ error: "something went wrong" })
+	}
 })
 
 router.post("/", async (request, response) => {

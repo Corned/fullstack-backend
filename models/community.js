@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const communitySchema = new mongoose.Schema({
 	name: String,
@@ -20,6 +21,8 @@ communitySchema.statics.format = (community) => {
 		posts: community.posts
 	}
 }
+
+communitySchema.plugin(deepPopulate)
 
 const Community = mongoose.model("Community", communitySchema)
 

@@ -24,7 +24,7 @@ router.get("/:community", async (request, response) => {
 		.populate("members", { _id: 1, username: 1 })
 		.populate("owner", { _id: 1, username: 1 })
 		.populate("banned", { _id: 1, username: 1 })
-		.populate("posts", { _id: 1, title: 1, type: 1 })
+		.populate("posts", { title: 1, type: 1, date: 1, body: 1, url: 1, user: 1, community: 1 })
 
 	response.json(Community.format(community))
 })
