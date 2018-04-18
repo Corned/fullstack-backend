@@ -28,7 +28,7 @@ router.get("/:username", async (request, response) => {
 			.populate("moderatorCommunities", { name: 1 })
 
 
-		await User.deepPopulate(user, "posts.community posts.user")
+		//await User.deepPopulate(user, "posts.community posts.user")
 
 		response.json(User.format(user))
 	} catch (exception) {

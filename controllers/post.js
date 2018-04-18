@@ -55,6 +55,8 @@ router.get("/u/:username", async (request, response) => {
 
 		const posts = await Post
 			.find({ user: user._id })
+			.populate("user", { _id: 1, username: 1 })
+			.populate("community", { _id: 1, name: 1 })
 
 		response.json(posts.map(Post.format))
 	} catch (exception) {
