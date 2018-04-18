@@ -108,6 +108,7 @@ router.post("/", async (request, response) => {
 			title: body.title,
 			user: userid,
 			community: community.id,
+			comments: [],
 			date: new Date(),
 			type: body.type,
 			url: body.url,
