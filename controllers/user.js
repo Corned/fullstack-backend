@@ -57,7 +57,7 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "password too short ( < 6 )"})
 		}
 
-		const users = await User.find({ username: body.username })
+		const users = await User.find({ usernameLowercase: body.username.toLowerCase() })
 		if (users.length > 0) {
 			return response.status(400).json({ error: "username already taken" })
 		}

@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const commentSchema = new mongoose.Schema({
 	author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+	parent: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
 	replies: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ],
 	body: String,
 	bodyLowercase: String
@@ -13,6 +14,7 @@ commentSchema.statics.format = (comment) => {
 		id: comment.id,
 		author: comment.author,
 		post: comment.post,
+		parent: comment.parent,
 		replies: comment.replies,
 		body: comment.body,
 		bodyLowercase: comment.bodyLowercase

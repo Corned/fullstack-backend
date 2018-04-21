@@ -7,7 +7,7 @@ router.post("/", async (request, response) => {
 	const body = request.body
 
 	try {
-		const user = await User.findOne({ username: body.username })
+		const user = await User.findOne({ usernameLowercase: body.username.toLowerCase() })
 		const passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.passwordHash)
 		
 		if (!(user && passwordCorrect)) {

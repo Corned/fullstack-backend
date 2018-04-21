@@ -46,7 +46,7 @@ router.post("/", async (request, response) => {
 		}			
 				
 		const user = await User.findById(body.owner)
-		const communities = await Community.find({ name: body.name })
+		const communities = await Community.find({ nameLowercase: body.name.toLowerCase() })
 		
 		if (user === null) {
 			// Should never happen
