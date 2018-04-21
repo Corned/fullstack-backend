@@ -4,7 +4,8 @@ const commentSchema = new mongoose.Schema({
 	author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
 	replies: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ],
-	body: String
+	body: String,
+	bodyLowercase: String
 })
 
 commentSchema.statics.format = (comment) => {
@@ -13,7 +14,8 @@ commentSchema.statics.format = (comment) => {
 		author: comment.author,
 		post: comment.post,
 		replies: comment.replies,
-		body: comment.body
+		body: comment.body,
+		bodyLowercase: comment.bodyLowercase
 	}
 }
 

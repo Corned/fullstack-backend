@@ -24,10 +24,10 @@ router.get("/:id", async (request, response) => {
 	response.json(Post.format(post))
 })
 
-router.get("/c/:community", async (request, response) => {
+router.get("/c/:communityName", async (request, response) => {
 	try {
 		const community = await Community
-			.findOne({ name: request.params.community })
+			.findOne({ nameToLowercase: request.params.communityName.toLowerCase() })
 
 		if (community === undefined) {
 			return response.json(400).json({ error: "community not found" })
@@ -47,7 +47,7 @@ router.get("/c/:community", async (request, response) => {
 router.get("/u/:username", async (request, response) => {
 	try {
 		const user = await User
-			.findOne({ username: request.params.username })
+			.findOne({ usernameLowercase: request.params.username.toLowerCase() })
 
 		if (user === undefined) {
 			return response.json(400).json({ error: "user not found" })
@@ -106,13 +106,15 @@ router.post("/", async (request, response) => {
 
 		const post = new Post({
 			title: body.title,
+			titleLowercase: body.title.toLowerCase(),
 			user: userid,
 			community: community.id,
 			comments: [],
 			date: new Date(),
 			type: body.type,
 			url: body.url,
-			body: body.body
+			body: body.body,
+			bodyLowercase: body.body.toLowerCase()
 		})
 
 		user.posts = [ ...user.posts, post ]

@@ -3,6 +3,7 @@ const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const userSchema = new mongoose.Schema({
 	username: String,
+	usernameLowercase: String,
 	isAdmin: Boolean,
 	passwordHash: String,
 	ownedCommunities: [ { type: mongoose.Schema.Types.ObjectId, ref: "Community" } ],
@@ -19,6 +20,7 @@ userSchema.statics.format = user => {
 	return {
 		id: user.id,
 		username: user.username,
+		usernameLowercase: user.usernameLowercase,
 		isAdmin: user.isAdmin,
 		passwordHash: user.passwordHash,
 		ownedCommunities: user.ownedCommunities,

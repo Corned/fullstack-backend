@@ -21,7 +21,7 @@ router.get("/", async (request, response) => {
 router.get("/:username", async (request, response) => {
 	try {
 		const user = await User
-			.findOne({ username: request.params.username })
+			.findOne({ usernameLowercase: request.params.username.toLowerCase() })
 			.populate("posts", { title: 1, type: 1, date: 1, body: 1, url: 1, user: 1, community: 1 })
 			.populate("communities", { name: 1 })
 			.populate("ownedCommunities", { name: 1 })
@@ -67,6 +67,7 @@ router.post("/", async (request, response) => {
 
 		const user = new User({
 			username: body.username,
+			usernameLowercase: body.username.toLowerCase(),
 			passwordHash,
 			isAdmin: false,
 			ownedCommunities: [],

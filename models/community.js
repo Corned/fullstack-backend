@@ -3,6 +3,7 @@ const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const communitySchema = new mongoose.Schema({
 	name: String,
+	nameLowercase: String,
 	owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	moderators: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
 	members: [ { type: mongoose.Schema.Types.ObjectId, ref: "User" } ],
@@ -14,6 +15,7 @@ communitySchema.statics.format = (community) => {
 	return {
 		id: community.id,
 		name: community.name,
+		nameLowercase: community.nameLowercase,
 		owner: community.owner,
 		moderators: community.moderators,
 		members: community.members,

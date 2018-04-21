@@ -5,10 +5,12 @@ const postSchema = new mongoose.Schema({
 	community: { type: mongoose.Schema.Types.ObjectId, ref: "Community" },
 	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 	title: String,
+	titleLowercase: String,
 	date: Date,
 	type: String,
 	url: String,
-	body: String
+	body: String,
+	bodyLowercase: String
 })
 
 postSchema.statics.format = (post) => {
@@ -18,10 +20,12 @@ postSchema.statics.format = (post) => {
 		community: post.community,
 		comments: post.comments,
 		title: post.title,
+		titleLowercase: post.title.toLowerCase(),
 		date: new Date(post.date),
 		type: post.type,
 		url: post.url || undefined,
-		body: post.body || undefined
+		body: post.body || undefined,
+		bodyLowercase: post.bodyLowercase || undefined
 	}
 }
 

@@ -17,9 +17,9 @@ router.get("/", async (request, response) => {
 	response.json(communities.map(Community.format))
 })
 
-router.get("/:community", async (request, response) => {
+router.get("/:communityName", async (request, response) => {
 	const community = await Community
-		.findOne({ name: request.params.community })
+		.findOne({ nameLowercase: request.params.communityName.toLowerCase() })
 		.populate("moderators", { _id: 1, username: 1 })
 		.populate("members", { _id: 1, username: 1 })
 		.populate("owner", { _id: 1, username: 1 })
@@ -59,6 +59,7 @@ router.post("/", async (request, response) => {
 
 		const community = new Community({
 			name: body.name,
+			nameLowercase: body.name.toLowerCase(),
 			owner: body.owner,
 			moderators: [ body.owner ],
 			members: [ body.owner ],
