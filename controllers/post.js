@@ -27,7 +27,7 @@ router.get("/:id", async (request, response) => {
 router.get("/c/:communityName", async (request, response) => {
 	try {
 		const community = await Community
-			.findOne({ nameToLowercase: request.params.communityName.toLowerCase() })
+			.findOne({ nameLowercase: request.params.communityName.toLowerCase() })
 
 		if (community === undefined) {
 			return response.json(400).json({ error: "community not found" })
@@ -35,8 +35,8 @@ router.get("/c/:communityName", async (request, response) => {
 
 		const posts = await Post
 			.find({ community: community._id })
-			.populate("user", { _id: 1, username: 1 })
-			.populate("community", { _id: 1, name: 1 })
+			.populate("user", { username: 1 })
+			.populate("community", { name: 1 })
 
 		response.json(posts.map(Post.format))
 	} catch (exception) {

@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken")
 router.get("/", async (request, response) => {
 	const comments = await Comment
 		.find({})
-		.populate("user", { _id: 1, username: 1 })
+		.populate("author", { username: 1 })
 
 	response.json(comments.map(Comment.format))
 })
@@ -19,7 +19,7 @@ router.get("/", async (request, response) => {
 router.get("/:id", async (request, response) => {
 	const comment = await Comment
 		.findById(request.params.id)
-		.populate("user", { _id: 1, username: 1 })
+		.populate("author", { username: 1 })
 
 	response.json(Comment.format(comment))
 })
@@ -51,29 +51,36 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "user missing" })
 		}
 
+		const post = await Post.findById(body.post.id)
+		if (post === null) {
+			return response.status(400).json({ error: "post missing" })
+		}
+
 		const comment = new Comment({
 			author: user,
 			body: body.body,
 			bodyLowercase: body.body.toLowerCase(),
 			parent: body.parent || null,
-			post: body.post,
+			post: post,
 			replies: []
 		})
 
 		user.comments = [ ...user.comments, comment ]
+		post.comments = [ ...post.comments, comment ]
 
 		await user.save()
+		await post.save()
 		const savedComment = await comment.save()
 
 		if (body.parent) {
 			const parentComment = await Comment
-				.findById(body.parent._id)
+				.findById(body.parent.id)
 
-			parentComment.replies = [ ...parentComment.replies, comment ]
+			parentComment.replies = [ ...parentComment.replies, savedComment ]
 			await parentComment.save()
 		}
-		
-		response.status(201).json(savedComment)
+
+		response.status(201).json({ done :"lol"})
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {
 			response.status(401).json({ error: exception.message })
