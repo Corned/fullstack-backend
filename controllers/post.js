@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken")
 router.get("/", async (request, response) => {
 	const posts = await Post
 		.find({})
-		.populate("user", { _id: 1, username: 1 })
-		.populate("community", { _id: 1, name: 1 })
+		.populate("user", { username: 1 })
+		.populate("community", { name: 1 })
 
 	response.json(posts.map(Post.format))
 })
@@ -18,8 +18,9 @@ router.get("/", async (request, response) => {
 router.get("/:id", async (request, response) => {
 	const post = await Post
 		.findById(request.params.id)
-		.populate("user", { _id: 1, username: 1 })
-		.populate("community", { _id: 1, name: 1 })
+		.populate("user", { username: 1 })
+		.populate("community", { name: 1 })
+		.populate("comments", { author: 1, body: 1 })
 
 	response.json(Post.format(post))
 })
