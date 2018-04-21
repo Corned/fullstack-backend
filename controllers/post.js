@@ -22,6 +22,9 @@ router.get("/:id", async (request, response) => {
 		.populate("community", { name: 1 })
 		.populate("comments", { author: 1, body: 1 })
 
+		
+	await Post.deepPopulate(post, "comments.author")
+
 	response.json(Post.format(post))
 })
 

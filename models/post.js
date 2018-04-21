@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const postSchema = new mongoose.Schema({
 	body: String,
@@ -28,6 +29,14 @@ postSchema.statics.format = (post) => {
 		user: post.user,
 	}
 }
+
+postSchema.plugin(deepPopulate, {
+	populate: {
+		"comments.author": {
+			select: "username"
+		}
+	}
+})
 
 const post = mongoose.model("Post", postSchema)
 

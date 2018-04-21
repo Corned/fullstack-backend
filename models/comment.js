@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const deepPopulate = require("mongoose-deep-populate")(mongoose);
 
 const commentSchema = new mongoose.Schema({
 	author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -20,6 +21,8 @@ commentSchema.statics.format = (comment) => {
 		replies: comment.replies
 	}
 }
+
+commentSchema.plugin(deepPopulate)
 
 const Comment = mongoose.model("Comment", commentSchema)
 

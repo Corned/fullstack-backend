@@ -21,6 +21,7 @@ router.get("/:id", async (request, response) => {
 		.findById(request.params.id)
 		.populate("author", { username: 1 })
 
+
 	response.json(Comment.format(comment))
 })
 
