@@ -1,31 +1,31 @@
 const mongoose = require("mongoose")
 
 const postSchema = new mongoose.Schema({
-	user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-	community: { type: mongoose.Schema.Types.ObjectId, ref: "Community" },
+	body: String,
+	bodyLowercase: String,
 	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+	community: { type: mongoose.Schema.Types.ObjectId, ref: "Community" },
+	date: Date,
 	title: String,
 	titleLowercase: String,
-	date: Date,
 	type: String,
 	url: String,
-	body: String,
-	bodyLowercase: String
+	user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 })
 
 postSchema.statics.format = (post) => {
 	return {
 		id: post.id,
-		user: post.user,
-		community: post.community,
+		body: post.body || undefined,
+		bodyLowercase: post.bodyLowercase || undefined,
 		comments: post.comments,
+		community: post.community,
+		date: new Date(post.date),
 		title: post.title,
 		titleLowercase: post.title.toLowerCase(),
-		date: new Date(post.date),
 		type: post.type,
 		url: post.url || undefined,
-		body: post.body || undefined,
-		bodyLowercase: post.bodyLowercase || undefined
+		user: post.user,
 	}
 }
 

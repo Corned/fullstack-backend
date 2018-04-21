@@ -37,8 +37,12 @@ router.post("/", async (request, response) => {
 
 		const userid = decodedToken.id
 
-		if (body.community === undefined) {
-			return response.status(400).json({ error: "community missing" })
+		if (body.body === undefined) {
+			return response.status(400).json({ error: "body missing" })
+		} else if (body.body.length < 3) {
+			return response.status(400).json({ error: "body's length must be greater than three" })
+		} else if (body.post === undefined) {
+			return response.status(400).json({ error: "post undefined, something went wrong" })
 		}
 
 		const user = await User.findById(userid)
@@ -47,24 +51,29 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "user missing" })
 		}
 
-		const post = new Post({
-			id: comment.id,
-			author: comment.author,
-			post: comment.post,
-			parent: comment.parent,
-			replies: comment.replies,
-			body: comment.body,
-			bodyLowercase: comment.bodyLowercase
+		const comment = new Comment({
+			author: user,
+			body: body.body,
+			bodyLowercase: body.body.toLowerCase(),
+			parent: body.parent || null,
+			post: body.post,
+			replies: []
 		})
 
-		user.posts = [ ...user.posts, post ]
-		community.posts = [ ...community.posts, post ]
+		user.comments = [ ...user.comments, comment ]
 
 		await user.save()
-		await community.save()
-		const savedPost = await post.save()
+		const savedComment = await comment.save()
+
+		if (body.parent) {
+			const parentComment = await Comment
+				.findById(body.parent._id)
+
+			parentComment.replies = [ ...parentComment.replies, comment ]
+			await parentComment.save()
+		}
 		
-		response.status(201).json(savedPost)
+		response.status(201).json(savedComment)
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {
 			response.status(401).json({ error: exception.message })
