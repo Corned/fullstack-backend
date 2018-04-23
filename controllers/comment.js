@@ -52,7 +52,7 @@ router.post("/", async (request, response) => {
 			return response.status(400).json({ error: "user missing" })
 		}
 
-		const post = await Post.findById(body.post.id)
+		const post = await Post.findById(body.post)
 		if (post === null) {
 			return response.status(400).json({ error: "post missing" })
 		}
@@ -75,7 +75,7 @@ router.post("/", async (request, response) => {
 
 		if (body.parent) {
 			const parentComment = await Comment
-				.findById(body.parent.id)
+				.findById(body.parent)
 
 			parentComment.replies = [ ...parentComment.replies, savedComment ]
 			await parentComment.save()
