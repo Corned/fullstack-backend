@@ -6,6 +6,7 @@ const commentSchema = new mongoose.Schema({
 	body: String,
 	bodyLowercase: String,
 	date: Date,
+	deleted: Boolean,
 	parent: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
 	post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
 	replies: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
@@ -18,6 +19,7 @@ commentSchema.statics.format = (comment) => {
 		body: comment.body,
 		bodyLowercase: comment.bodyLowercase,
 		date: comment.date,
+		deleted: comment.deleted,
 		parent: comment.parent,
 		post: comment.post,
 		replies: comment.replies
