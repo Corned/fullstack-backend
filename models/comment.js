@@ -5,6 +5,7 @@ const commentSchema = new mongoose.Schema({
 	author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 	body: String,
 	bodyLowercase: String,
+	date: Date,
 	parent: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
 	post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
 	replies: [ { type: mongoose.Schema.Types.ObjectId, ref: "Comment" } ]
@@ -16,6 +17,7 @@ commentSchema.statics.format = (comment) => {
 		author: comment.author,
 		body: comment.body,
 		bodyLowercase: comment.bodyLowercase,
+		date: comment.date,
 		parent: comment.parent,
 		post: comment.post,
 		replies: comment.replies

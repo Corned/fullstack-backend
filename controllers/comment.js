@@ -61,6 +61,7 @@ router.post("/", async (request, response) => {
 			author: user,
 			body: body.body,
 			bodyLowercase: body.body.toLowerCase(),
+			date: new Date(),
 			parent: body.parent || null,
 			post: post,
 			replies: []
