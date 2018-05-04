@@ -15,14 +15,20 @@ router.get("/", async (request, response) => {
 	response.json(comments.map(Comment.format))
 })
 
-// Specific post data
 router.get("/:id", async (request, response) => {
 	const comment = await Comment
 		.findById(request.params.id)
 		.populate("author", { username: 1 })
 
-
 	response.json(Comment.format(comment))
+})
+
+router.get("/post/:id", async (request, response) => {
+	const comments = await Comment
+		.find({ post: request.params.id })
+		.populate("author", { username: 1 })
+
+	response.json(comments.map(Comment.format))
 })
 
 router.post("/", async (request, response) => {
