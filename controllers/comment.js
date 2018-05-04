@@ -81,7 +81,7 @@ router.post("/", async (request, response) => {
 		await post.save()
 		const savedComment = await comment.save()
 
-		if (body.parent) {
+		if (body.parent !== null) {
 			const parentComment = await Comment
 				.findById(body.parent)
 
@@ -89,7 +89,7 @@ router.post("/", async (request, response) => {
 			await parentComment.save()
 		}
 
-		response.status(201).json({ done :"lol"})
+		response.status(201).json(Comment.format(savedComment))
 	} catch (exception) {
 		if (exception.name === "JsonWebTokenError") {
 			response.status(401).json({ error: exception.message })
