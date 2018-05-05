@@ -26,8 +26,6 @@ commentSchema.statics.format = (comment) => {
 	}
 }
 
-commentSchema.plugin(deepPopulate)
-
 const Comment = mongoose.model("Comment", commentSchema)
 
 module.exports = Comment

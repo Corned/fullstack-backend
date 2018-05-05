@@ -31,10 +31,15 @@ router.get("/post/:id", async (request, response) => {
 	response.json(comments.map(Comment.format))
 })
 
-router.post("/", async (request, response) => {
-	const body = request.body
-	
+router.post("/", async (request, response) => {	
 	try {
+		// Comment's body, the text.
+		const commentBody = request.body.body
+		// Comment's post, the post where the comment was made.
+		const postId = request.body.post
+		// Comment's parent, the comment you're replying to.
+		const parentId = request.body.parent
+
 		const token = request.token
 		const decodedToken = jwt.verify(token, process.env.SECRET)
 
@@ -44,33 +49,32 @@ router.post("/", async (request, response) => {
 
 		const userid = decodedToken.id
 
-		if (body.body === undefined) {
+		if (commentBody === undefined) {
 			return response.status(400).json({ error: "body missing" })
-		} else if (body.body.length < 3) {
-			return response.status(400).json({ error: "body's length must be greater than three" })
-		} else if (body.post === undefined) {
+		} else if (commentBody.length === 0) {
+			return response.status(400).json({ error: "body's length must be greater than zero" })
+		} else if (postId === undefined) {
 			return response.status(400).json({ error: "post undefined, something went wrong" })
 		}
 
 		const user = await User.findById(userid)
-
 		if (user === null) {
 			return response.status(400).json({ error: "user missing" })
 		}
 
-		const post = await Post.findById(body.post)
+		const post = await Post.findById(postId)
 		if (post === null) {
 			return response.status(400).json({ error: "post missing" })
 		}
 
 		const comment = new Comment({
-			author: user,
-			body: body.body,
-			bodyLowercase: body.body.toLowerCase(),
+			author: userid,
+			body: commentBody,
+			bodyLowercase: commentBody.toLowerCase(),
 			date: new Date(),
 			deleted: false,
-			parent: body.parent || null,
-			post: post,
+			parent: parentId || null,
+			post: postId,
 			replies: []
 		})
 
@@ -81,9 +85,9 @@ router.post("/", async (request, response) => {
 		await post.save()
 		const savedComment = await comment.save()
 
-		if (body.parent !== null) {
+		if (parentId !== null) {
 			const parentComment = await Comment
-				.findById(body.parent)
+				.findById(parentId)
 
 			parentComment.replies = [ ...parentComment.replies, savedComment ]
 			await parentComment.save()
