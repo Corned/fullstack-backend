@@ -111,7 +111,14 @@ router.delete("/:id", async (request, response) => {
 			return response.status(401).json({ error: "token missing or invalid" })
 		}
 
+		const userid = decodedToken.id
+
 		const comment = await Comment.findById(id)
+
+		if (userid !== comment.author.id) {
+			return response.status(401).json({ error: "you don't own this comment" })
+		}
+
 		comment.deleted = true
 		const savedComment = await comment.save()
 
