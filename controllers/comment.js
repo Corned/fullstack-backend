@@ -102,6 +102,28 @@ router.post("/", async (request, response) => {
 
 router.delete("/:id", async (request, response) => {
 	const id = request.params.id
+
+	try {
+		const token = request.token
+		const decodedToken = jwt.verify(token, process.env.SECRET)
+
+		if (!token || !decodedToken.id) {
+			return response.status(401).json({ error: "token missing or invalid" })
+		}
+
+		const comment = await Comment.findById(id)
+		comment.deleted = true
+		const savedComment = await comment.save()
+
+		response.status(200).json(Comment.format(savedComment))
+	}catch (exception) {
+		if (exception.name === "JsonWebTokenError") {
+			response.status(401).json({ error: exception.message })
+		} else {
+			console.log(exception)
+			response.status(500).json({ error: "Oops!" })
+		}
+	}
 })
 
 module.exports = router

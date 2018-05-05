@@ -14,7 +14,7 @@ const commentSchema = new mongoose.Schema({
 
 commentSchema.statics.format = (comment) => {
 	return {
-		id: comment.id,
+		id: comment._id,
 		author: comment.author,
 		body: comment.body,
 		bodyLowercase: comment.bodyLowercase,
