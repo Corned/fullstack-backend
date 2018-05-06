@@ -68,7 +68,7 @@ router.post("/", async (request, response) => {
 		}
 
 		const comment = new Comment({
-			author: userid,
+			author: user,
 			body: commentBody,
 			bodyLowercase: commentBody.toLowerCase(),
 			date: new Date(),
