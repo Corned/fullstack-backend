@@ -118,8 +118,9 @@ router.delete("/:id", async (request, response) => {
 		const userid = decodedToken.id
 
 		const comment = await Comment.findById(id)
+		const author = await User.findById(comment.author) // groan
 
-		if (userid !== comment.author.id) {
+		if (userid !== author.id) {
 			return response.status(401).json({ error: "you don't own this comment" })
 		}
 

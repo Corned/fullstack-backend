@@ -118,7 +118,7 @@ router.post("/", async (request, response) => {
 			type: body.type,
 			url: body.url,
 			body: body.body,
-			bodyLowercase: body.body.toLowerCase()
+			bodyLowercase: body.body ? body.body.toLowerCase() : null
 		})
 
 		user.posts = [ ...user.posts, post ]
