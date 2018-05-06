@@ -117,10 +117,26 @@ router.delete("/:id", async (request, response) => {
 
 		const userid = decodedToken.id
 
+		// TODO: Fix this mess
 		const comment = await Comment.findById(id)
-		const author = await User.findById(comment.author) // groan
+		const commentAuthor = await User.findById(comment.author) 	// groan
+		const commentPost = await Post.findById(comment.post) 		// groan
+		const commentCommunity = await Community.findById(commentPost.community) 	// groan
 
-		if (userid !== author.id) {
+		const isAuthor = userid === commentAuthor.id
+		const isModerator = (() => {
+			for (let i in commentCommunity.moderators) {
+				if (commentCommunity.moderators[i] == userid) {
+					return true;
+				}
+			}
+
+			return false
+		})()
+		
+		console.log(isAuthor, isModerator)
+
+		if (!isAuthor || !isModerator) {
 			return response.status(401).json({ error: "you don't own this comment" })
 		}
 
