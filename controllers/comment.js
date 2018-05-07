@@ -125,6 +125,8 @@ router.delete("/:id", async (request, response) => {
 
 		const isAuthor = userid === commentAuthor.id
 		const isModerator = (() => {
+			// Hacks, gotta use == instead of ===
+			// Feelsbadman
 			for (let i in commentCommunity.moderators) {
 				if (commentCommunity.moderators[i] == userid) {
 					return true;
@@ -133,7 +135,7 @@ router.delete("/:id", async (request, response) => {
 
 			return false
 		})()
-		
+
 		console.log(isAuthor, isModerator)
 
 		if (!isAuthor || !isModerator) {
